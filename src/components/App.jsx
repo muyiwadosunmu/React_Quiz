@@ -10,8 +10,13 @@ const initialState = {
   questions: [],
   // 'loading', 'error, 'ready', 'active', 'finished'
   status: "loading",
+  index: 0, // to keep track of our questions
+  answer: null, //To keep track of answers user choose from the question
+  points: 0,
 };
 function reducer(state, action) {
+  const question = state.questions.at(state.index); // Used by newAnswer action
+
   switch (action.type) {
     case "dataReceived":
       return {
@@ -27,6 +32,15 @@ function reducer(state, action) {
       };
     case "start":
       return { ...state, status: "active" };
+    case "newAnswer":
+      return {
+        ...state,
+        answer: action.payload,
+        points:
+          action.payload === question.correctOption
+            ? state.points + question.points
+            : state.points,
+      };
 
     default:
       throw new Error("Action Unknown");
@@ -35,7 +49,7 @@ function reducer(state, action) {
 
 export default function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { questions, status } = state;
+  const { questions, status, index, answer, points } = state;
 
   // Derived state
   const numQuestions = questions.length;
@@ -55,7 +69,14 @@ export default function App() {
         {status === "ready" && (
           <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
         )}
-        {status === "active" && <Question />}
+        {status === "active" && (
+          <Question
+            question={questions[index]}
+            dispatch={dispatch}
+            answer={answer}
+            points={points}
+          />
+        )}
       </Main>
     </div>
   );
