@@ -24,7 +24,7 @@ Progress.propTypes = {
   numQuestions: PropTypes.number,
   points: PropTypes.number,
   maxPossiblePoints: PropTypes.number,
-  answer: PropTypes.string,
+  answer: PropTypes.number,
 };
 
 export default Progress;
