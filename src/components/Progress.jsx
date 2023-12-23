@@ -1,6 +1,9 @@
 import PropTypes from "prop-types";
+import { useQuiz } from "../context/QuizContext";
 
-function Progress({ index, numQuestions, points, maxPossiblePoints, answer }) {
+function Progress() {
+  const { index, numQuestions, points, maxPossiblePoints, answer } = useQuiz();
+
   return (
     <header className="progress">
       <progress
